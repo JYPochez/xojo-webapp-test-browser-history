@@ -46,6 +46,15 @@ Begin WebPage WebPage1
       Scope           =   0
       _mPanelIndex    =   -1
    End
+   Begin WebBrowserHistory BrowserHistory4
+      ControlID       =   ""
+      Enabled         =   True
+      Index           =   -2147483648
+      LockedInPosition=   False
+      PanelIndex      =   0
+      Scope           =   2
+      _mPanelIndex    =   -1
+   End
    Begin WebPagePanel PagePanelMain
       ControlCount    =   0
       ControlID       =   ""
@@ -1606,33 +1615,6 @@ Begin WebPage WebPage1
          Underline       =   False
          Visible         =   True
          Width           =   812
-         _mPanelIndex    =   -1
-      End
-      Begin WebBrowserHistory BrowserHistory4
-         ControlID       =   ""
-         CSSClasses      =   ""
-         Enabled         =   True
-         Height          =   20
-         Index           =   -2147483648
-         Indicator       =   ""
-         Left            =   30
-         LockBottom      =   False
-         LockedInPosition=   False
-         LockHorizontal  =   False
-         LockLeft        =   True
-         LockRight       =   False
-         LockTop         =   True
-         LockVertical    =   False
-         PanelIndex      =   3
-         Parent          =   "PagePanelMain"
-         Scope           =   2
-         TabIndex        =   8
-         TabPanelIndex   =   0
-         TabStop         =   True
-         Tooltip         =   ""
-         Top             =   470
-         Visible         =   False
-         Width           =   20
          _mPanelIndex    =   -1
       End
       Begin WebButton ButtonBack4
