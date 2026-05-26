@@ -27,7 +27,7 @@ Run the project, pick one of the four methods from the main menu, then navigate 
 | Method | Mechanism | URL style | Requires WebSDK? | Lines of code | When to use |
 |--------|-----------|-----------|------------------|---------------|-------------|
 | **1** | [`Session.ExecuteJavaScript`](https://documentation.xojo.com/api/web/websession.html#websession-executejavascript) + hidden [`WebTextField`](https://documentation.xojo.com/api/user_interface/web/webtextfield.html) bridge | `#home` | No | ~30 | You need a quick fix and don't want any custom classes |
-| **4** | Custom [`WebSDKUIControl`](https://documentation.xojo.com/api/web/web_sdk/websdkuicontrol.html) wrapping `history.pushState` | `#home` | Yes | ~100 | You want a reusable, clean, drop-in component |
+| **4** | Custom non-visual [`WebSDKControl`](https://documentation.xojo.com/api/web/web_sdk/websdkcontrol.html) wrapping `history.pushState` | `#home` | Yes | ~100 | You want a reusable, clean, drop-in component |
 | **5** | [`App.HandleURL`](https://documentation.xojo.com/api/web/webapplication.html#webapplication-handleurl) GET endpoint + popstate `fetch()` | `#home` | No | ~80 | You already use `HandleURL` for other API endpoints |
 | **7** | Native [`WebSession.SaveState`](https://documentation.xojo.com/api/web/websession.html#websession-savestate) + [`HashtagChanged`](https://documentation.xojo.com/api/web/websession.html#websession-hashtagchanged) event | `#home` | No | ~10 | **The recommended default for most apps** |
 
@@ -135,13 +135,13 @@ End Sub
 
 ---
 
-### Method 4 — Custom [WebSDK control](https://documentation.xojo.com/api/web/web_sdk/websdkuicontrol.html) (`WebBrowserHistory`)
+### Method 4 — Custom non-visual [WebSDK control](https://documentation.xojo.com/api/web/web_sdk/websdkcontrol.html) (`WebBrowserHistory`)
 
 Use this if you want a reusable, drop-in component you can keep across projects. The cleanest architecture, but requires WebSDK boilerplate.
 
 **Copy `WebBrowserHistory.xojo_code` into your project** and add it to your `.xojo_project` manifest.
 
-**Drop a `WebBrowserHistory` control onto your WebPage** (invisible — it renders `display:none`).
+**Drop a `WebBrowserHistory` control onto your WebPage.** It's non-visual — it lands in the page's non-visual control tray (alongside `WebTimer`), not on the visible canvas.
 
 **In your nav button handlers**:
 
@@ -176,7 +176,7 @@ Sub Ready()
 End Sub
 ```
 
-This method exposes `PushState(path, title)`, `ReplaceState(path, title)`, and raises `PopState(path)` and `Ready`. It uses the proper WebSDK `triggerServerEvent` channel — no DOM hacks.
+This method exposes `PushState(path, title)`, `ReplaceState(path, title)`, and raises `PopState(path)` and `Ready`. It uses the proper WebSDK `triggerServerEvent` channel — no DOM hacks. The JS side extends `XojoWeb.XojoControl` (non-visual base) and wires the `popstate` listener in its constructor; there's no DOM element to hide.
 
 ---
 
@@ -277,7 +277,7 @@ These all bit us during development. Each contradicts what you'd reasonably expe
 | `App.xojo_code` | [`WebApplication`](https://documentation.xojo.com/api/web/webapplication.html) subclass. Hosts [`HandleURL`](https://documentation.xojo.com/api/web/webapplication.html#webapplication-handleurl) for Method 5. |
 | `Session.xojo_code` | [`WebSession`](https://documentation.xojo.com/api/web/websession.html) subclass. Implements [`HashtagChanged`](https://documentation.xojo.com/api/web/websession.html#websession-hashtagchanged) (Method 7) and stores pending paths (Method 5). |
 | `WebPage1.xojo_code` | The single page. 5 top-level panels (menu + 4 demos). All button handlers and bridge controls. |
-| `WebBrowserHistory.xojo_code` | Method 4's [`WebSDKUIControl`](https://documentation.xojo.com/api/web/web_sdk/websdkuicontrol.html). Drop-in reusable history component. |
+| `WebBrowserHistory.xojo_code` | Method 4's non-visual [`WebSDKControl`](https://documentation.xojo.com/api/web/web_sdk/websdkcontrol.html). Drop-in reusable history component. |
 | `BrowserHistoryUtils.xojo_code` | Shared module: `eMethod`, `eVirtualPage` enums; path/title constants; `kHistoryEndpoint`. |
 
 ---
